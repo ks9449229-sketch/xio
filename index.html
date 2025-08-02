@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>For Xio 💖</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      background: black;
+      font-family: 'Segoe UI', sans-serif;
+      color: #ff4d6d;
+      overflow: hidden;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      position: relative;
+    }
+
+    body::before {
+      content: "❤️";
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      font-size: 90vmin;
+      opacity: 0.05;
+      transform: translate(-50%, -50%);
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    .glow-typing {
+      font-size: 2em;
+      white-space: nowrap;
+      overflow: hidden;
+      border-right: 3px solid #ff4d6d;
+      width: 0;
+      animation: typing 4s steps(30, end) forwards, blink 0.8s step-end infinite;
+      color: #ff4d6d;
+      text-shadow: 0 0 10px #ff4d6d, 0 0 20px #ff4d6d, 0 0 30px #ff1a4d;
+      z-index: 2;
+    }
+
+    @keyframes typing {
+      from { width: 0; }
+      to { width: 28ch; }
+    }
+
+    @keyframes blink {
+      50% { border-color: transparent; }
+    }
+
+    .message {
+      margin-top: 40px;
+      font-size: 1.4em;
+      opacity: 0;
+      animation: fadeIn 3s ease-in-out 4s forwards;
+      line-height: 1.6;
+      max-width: 600px;
+      z-index: 2;
+    }
+
+    @keyframes fadeIn {
+      to { opacity: 1; }
+    }
+
+    .heart {
+      position: fixed;
+      top: -40px;
+      font-size: 20px;
+      color: #ff4d6d;
+      animation: fall linear;
+      z-index: 1;
+    }
+
+    @keyframes fall {
+      to {
+        transform: translateY(110vh) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    .button-area {
+      margin-top: 40px;
+      display: flex;
+      gap: 20px;
+      z-index: 3;
+    }
+
+    .btn {
+      padding: 10px 20px;
+      font-size: 1.1em;
+      border: none;
+      cursor: pointer;
+      border-radius: 8px;
+      background: #ff1a4d;
+      color: white;
+      box-shadow: 0 0 10px #ff1a4d;
+      transition: 0.3s;
+    }
+
+    .btn:hover {
+      background: #ff4d6d;
+      transform: scale(1.1);
+    }
+
+    .result {
+      margin-top: 20px;
+      font-size: 1.5em;
+      color: #ffccff;
+      z-index: 3;
+    }
+
+    #noBtn {
+      position: relative;
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+
+  <canvas id="shootingStars"></canvas>
+
+  <h1 class="glow-typing">Hey Xio, I have something for you 💌</h1>
+
+  <div class="message">
+    You’ve been more than just a friend —  
+    You’ve been laughter in silence,  
+    A calm in chaos,  
+    A heart I trust unconditionally.  
+    <br><br>
+    Thank you for being my constant. 💖  
+    You truly mean the world to me,
+      Will you marry me 💍 ?
+  </div>
+
+  <div class="button-area" id="proposal" style="opacity: 0; animation: fadeIn 3s ease-in-out 8s forwards;">
+    <button class="btn" onclick="acceptLove()">Yes 💕</button>
+    <button class="btn" id="noBtn">No 🙈</button>
+  </div>
+
+  <div class="result" id="resultText"></div>
+
+  <script>
+    // Heart Rain
+    setInterval(() => {
+      const heart = document.createElement('div');
+      heart.classList.add('heart');
+      heart.textContent = '❤️';
+      heart.style.left = Math.random() * 100 + 'vw';
+      heart.style.animationDuration = (3 + Math.random() * 3) + 's';
+      heart.style.fontSize = (18 + Math.random() * 20) + 'px';
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 7000);
+    }, 200);
+
+    // No Button runs away
+    const noBtn = document.getElementById('noBtn');
+    noBtn.addEventListener('mouseenter', moveButton);
+    noBtn.addEventListener('touchstart', moveButton);
+
+    function moveButton() {
+      const x = Math.random() * (window.innerWidth - 100);
+      const y = Math.random() * (window.innerHeight - 50);
+      noBtn.style.position = 'absolute';
+      noBtn.style.left = `${x}px`;
+      noBtn.style.top = `${y}px`;
+    }
+
+    function acceptLove() {
+      document.getElementById('resultText').innerHTML = "Yayy! I love you so much ❤️";
+    }
+
+    // Shooting Stars
+    const canvas = document.getElementById('shootingStars');
+    const ctx = canvas.getContext('2d');
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const stars = [];
+
+    function createStar() {
+      stars.push({
+        x: Math.random() * canvas.width,
+        y: 0,
+        len: Math.random() * 80 + 10,
+        speed: Math.random() * 5 + 3,
+        angle: Math.PI / 4,
+        opacity: Math.random() * 0.5 + 0.3
+      });
+    }
+
+    function drawStars() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = 'rgba(255,255,255,0.3)';
+      ctx.strokeStyle = 'white';
+      ctx.lineWidth = 2;
+      stars.forEach((star, i) => {
+        const xEnd = star.x + star.len * Math.cos(star.angle);
+        const yEnd = star.y + star.len * Math.sin(star.angle);
+        ctx.beginPath();
+        ctx.moveTo(star.x, star.y);
+        ctx.lineTo(xEnd, yEnd);
+        ctx.stroke();
+        star.x += star.speed * Math.cos(star.angle);
+        star.y += star.speed * Math.sin(star.angle);
+        if (star.x > canvas.width || star.y > canvas.height) stars.splice(i, 1);
+      });
+    }
+
+    function animateStars() {
+      drawStars();
+      requestAnimationFrame(animateStars);
+    }
+
+    setInterval(createStar, 500);
+    animateStars();
+
+    window.addEventListener('resize', () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    });
+  </script>
+
+</body>
+</html>
